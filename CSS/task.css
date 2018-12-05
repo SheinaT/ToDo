@@ -7,7 +7,14 @@ body {
    background-size:cover;
     
 }
-
+#root{
+    poition:relative;
+}
+.example{
+    position:absolute;
+    top:30vh;
+    margin-left:30%;
+}
 .wrapper {
     display: flex;
     align-items: stretch;
