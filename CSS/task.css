@@ -10,10 +10,16 @@ body {
 #root{
     poition:relative;
 }
+
 .example{
     position:absolute;
     top:30vh;
     margin-left:30%;
+}
+
+#list-item{
+    border-radius:10px;
+    padding:5px;
 }
 .wrapper {
     display: flex;

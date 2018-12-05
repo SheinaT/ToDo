@@ -95,7 +95,7 @@ class ListItem extends React.Component {
     render() {
         return (
             <div className="example">
-            <input ref={(input)=>{this.name=input;}} type="text"  placeholder="example"/>
+            <input ref={(input)=>{this.name=input;}} type="text"  placeholder="example" id="list-item"/>
             </div>
         );
     }
