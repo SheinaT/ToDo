@@ -7,7 +7,7 @@ class App extends React.Component {
         return (
             <div className="background">
                 <Menu />
-                <EnterItem />
+                <Main />
             </div>
 
         )
@@ -62,6 +62,16 @@ class Menu extends React.Component {
     }
 }
 
+class Main extends React.Component {
+    render() {
+        return (
+            <div class="mainContainer">
+                <EnterItem />
+            </div>
+        );
+    }
+}
+
 
 class EnterItem extends React.Component {
     constructor(props) {
@@ -98,7 +108,7 @@ class EnterItem extends React.Component {
     render() {
         return (
             <div className="EnterNewItem">
-                <input ref={(input) => { this.textInput = input; }}></input>
+                <input className="addNewItemText" ref={(input) => { this.textInput = input; }}></input>
                 <input type="date" ref={(input) => { this.dateInput = input; }}></input>
                 <select onChange={this.handleSelect}>
                     <option value="0">ITC</option>
