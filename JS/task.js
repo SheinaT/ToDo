@@ -96,6 +96,9 @@ class EnterItem extends React.Component {
         });
     }
     render() {
+        var listIems=this.state.list.map(
+            x=><List object= {x}/>
+        )
         return (
             <div className="EnterNewItem">
                 <input ref={(input) => { this.textInput = input; }}></input>
@@ -106,7 +109,11 @@ class EnterItem extends React.Component {
                     <option value="2">Chores</option>
                 </select>
                 <button onClick={this.getInput}> ENTER </button>
-                <List />
+                <div>
+                <input type="checkbox"/> {listIems}
+                </div>
+    
+               
             </div>
         );
     }
@@ -118,6 +125,7 @@ class List extends React.Component {
     render() {
         return (
             <div className="example">
+            {this.props.object.textInput} on {this.props.object.dateInput}
             </div>
         );
     }
