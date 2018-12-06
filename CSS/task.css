@@ -32,12 +32,12 @@ form{
   align-items: stretch;
   justify-content:center;
   min-height: 100vh;
+  width: 20vw;
   float: left;
   padding: 20px;
 }
   
 #sidebar {
-  min-width: 250px;
   max-width: 250px;
   height:100vh;
   background: rgb(99, 100, 107);
@@ -67,6 +67,7 @@ form{
 .mainContainer {
   min-height: 100vh;
   float: right;
+  width: 78vw;
 }
 
 
@@ -78,9 +79,28 @@ form{
 }
 
 .addNewItemText {
-  width: 250px;
+  margin: 1vw;
+  width: 50vw;
 }
 
-li{
+/* -------------- MAIN LIST ------------- */
+.toDoListContainer {
+  width: 100%;
+}
+
+.main-list {
+  width: 100%;
+}
+
+.main-list > li {
+  background: black;
+  color: white;
+  font-size: 18px;
+  margin-top: 1vh;
+  margin-left: -18px;
+  opacity: 0.8;
+}
+
+li {
   list-style: none;
 }

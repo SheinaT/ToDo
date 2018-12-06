@@ -112,8 +112,7 @@ class EnterItem extends React.Component {
         this.counter = 0;
         this.state = {
             list: [],
-            categories: ["Chores"]
-
+            categories: ["ITC", "Ulpan", "Chores"]
         };
     }
     addList(event) {
