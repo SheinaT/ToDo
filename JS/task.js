@@ -63,10 +63,41 @@ class Menu extends React.Component {
 }
 
 class Main extends React.Component {
+    constructor(props) {
+        super(props);
+        this.toggleItem = this.toggleItem.bind(this);
+        this.addItem =  this.addItem.bind(this);
+        this.counter = 0;
+        this.state = {
+            list: [],
+            categories: ["Chores"],
+            todos: [],
+            completed: []
+
+        };
+    }
+    toggleItem(event) {
+        event.preventDefault();
+        this.setState({
+            todos: newList
+        })
+    }
+    addItem(obj) {
+        console.log(obj);
+        var newTodos = this.state.todos;
+        var newItem = obj;
+        newTodos.push(newItem);
+        this.setState({
+            todos: newTodos
+        })
+    }
     render() {
         return (
             <div className="mainContainer">
-                <EnterItem />
+                <EnterItem input={this.addItem} />
+                <ToDoList toggleItem={this.toggleItem} todos={this.state.todos} />
+                <Done toggleItem={this.toggleItem} dones={this.state.completed} />
+
             </div>
         );
     }
@@ -82,22 +113,34 @@ class EnterItem extends React.Component {
         this.state = {
             list: [],
             categories: ["Chores"]
+
         };
     }
     addList(event) {
         event.preventDefault();
-        var new_task = {
-            textInput: this.textInput.value,
-            date: this.dateInput.value,
-            counter: this.counter
+        var textInput=this.textInput.value;
+        var dateInput=this.dateInput.value;
+        var obj = {
+            textInput: textInput,
+            date: dateInput
         }
-        this.counter += 1;
-        var newList = this.state.list;
-        newList.push(new_task);
-        this.setState({
-            list: newList
-        })
+        this.props.input(obj);
+
+ 
     }
+    
+       
+        // var new_task = {
+        //     textInput: this.textInput.value,
+        //     date: this.dateInput.value,
+        //     counter: this.counter
+        // }
+        // this.counter += 1;
+        // var newList = this.state.list;
+        // newList.push(new_task);
+        // this.setState({
+        //     list: newLi  // })
+    
     // handleSelect() {            //ALLOWS CATEGORY DROPDOWN MENU TO GET CATEGORIE VALUE
     //     this.setState({
     //         value: event.target.value
@@ -107,32 +150,35 @@ class EnterItem extends React.Component {
         return (
             <div className="EnterNewItem">
                 <form onSubmit={this.addList}>
-                    <input className="addNewItemText" ref={(input) => { this.textInput = input}} placeholder="Enter new item to your To Do list"></input>
-                    <input type="date" ref={(input) => { this.dateInput = input}}></input>
+                    <input className="addNewItemText" ref={(input) => { this.textInput = input }}  placeholder="Enter new item to your To Do list"></input>
+                    <input type="date" ref={(input) => { this.dateInput = input }}></input>
                     <select onChange={this.handleSelect}>
                         <option value="0">ITC</option>
                         <option value="1">Ulpan</option>
                         <option value="2">Chores</option>
                     </select>
-                    <div>
-                        <List list={this.state.list} />
-                    </div>
-
                 </form>
-
-
 
             </div>
         );
     }
 }
 
-class List extends React.Component {
+class ToDoList extends React.Component {
     constructor(props) {
         super(props);
+        this.isChecked = this.isChecked.bind(this);
+        this.state = {
+           list: this.props.todos
+        };
 
     }
+    isChecked(event) {
+        event.preventDefault();
+        this.props.toggleItem(event);
 
+    }
+    //////this is passing an object not a string aka only text/////
     generateItemString(activity) {
         var new_activity = `${activity.textInput} on ${activity.date}`;
         return new_activity;
@@ -140,22 +186,40 @@ class List extends React.Component {
 
     render() {
         return (
+            /////needs to pass an object////
             <div className="list">
-                <ul>
-                    {this.props.list.map((activity, i) => <li key={i}><input type="checkbox" /> {this.generateItemString(activity)}</li>)}
+                <ul className="main-list">
+                    {this.state.list.map((activity, i) => <li key= {i} ><input type="checkbox" onChange={this.isChecked} /> {this.generateItemString(activity)}</li>)} 
                 </ul>
             </div>
         );
     }
 }
 
+class Done extends React.Component {
+    constructor(props) {
+        super(props);
+        // this.itemNotDone=this.itemNotDone.bind(this);
+        this.state = {
+            // doneList=[]
+        };
+    }
+    itemNotDone() {
 
+    }
 
+    render() {
+        return (
+            <div className="done-items">
+            </div>
+        );
+    }
+}
 
 function render() {
     ReactDOM.render(
         <App />,
-
+        
         document.getElementById("root")
     );
 }
