@@ -81,7 +81,7 @@ class EnterItem extends React.Component {
         this.counter = 0;
         this.state = {
             list: [],
-            categories: ["Chores"]
+            categories: ["ITC", "Ulpan", "Chores"]
         };
     }
     addList(event) {
@@ -140,8 +140,8 @@ class List extends React.Component {
 
     render() {
         return (
-            <div className="list">
-                <ul>
+            <div className="toDoListContainer">
+                <ul className="main-list">
                     {this.props.list.map((activity, i) => <li key={i}><input type="checkbox" /> {this.generateItemString(activity)}</li>)}
                 </ul>
             </div>
