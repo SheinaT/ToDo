@@ -7,7 +7,7 @@ class App extends React.Component {
         return (
             <div className="background">
                 <Menu />
-                <EnterItem />
+                <Main />
             </div>
 
         )
@@ -62,70 +62,88 @@ class Menu extends React.Component {
     }
 }
 
-
-class EnterItem extends React.Component {
-    constructor(props) {
-        super(props);
-        this.addList = this.addList.bind(this);
-        this.getInput = this.getInput.bind(this)
-        this.counter = 0;
-        this.state = {
-            list: [],
-        };
-    }
-    getInput() {
-        this.setState({
-            inputText: this.textInput.value,
-            inputDate: this.dateInput.value,
-        });
-        this.addList();
-    }
-    addList() {
-        var new_task = <li key={this.counter}>{this.textInput.value}  {this.dateInput.value}</li>
-        this.counter += 1;
-        var list = this.state.list;
-        list.push(new_task);
-        this.setState({
-            list: list,
-            categories: ["Chores"]
-        })
-    }
-    handleSelect() {            //ALLOWS CATEGORY DROPDOWN MENU TO GET CATEGORIE VALUE
-        this.setState({
-            value: event.target.value
-        });
-    }
+class Main extends React.Component {
     render() {
-        var listIems=this.state.list.map(
-            x=><List object= {x}/>
-        )
         return (
-            <div className="EnterNewItem">
-                <input ref={(input) => { this.textInput = input; }}></input>
-                <input type="date" ref={(input) => { this.dateInput = input; }}></input>
-                <select onChange={this.handleSelect}>
-                    <option value="0">ITC</option>
-                    <option value="1">Ulpan</option>
-                    <option value="2">Chores</option>
-                </select>
-                <button onClick={this.getInput}> ENTER </button>
-                <div>
-                <input type="checkbox"/> {listIems}
-                </div>
-    
-               
+            <div className="mainContainer">
+                <EnterItem />
             </div>
         );
     }
 }
 
 
+class EnterItem extends React.Component {
+    constructor(props) {
+        super(props);
+        this.addList = this.addList.bind(this);
+        // this.getInput = this.getInput.bind(this)
+        this.counter = 0;
+        this.state = {
+            list: [],
+            categories: ["Chores"]
+        };
+    }
+    addList(event) {
+        event.preventDefault();
+        var new_task = {
+            textInput: this.textInput.value,
+            date: this.dateInput.value,
+            counter: this.counter
+        }
+        this.counter += 1;
+        var newList = this.state.list;
+        newList.push(new_task);
+        this.setState({
+            list: newList
+        })
+    }
+    // handleSelect() {            //ALLOWS CATEGORY DROPDOWN MENU TO GET CATEGORIE VALUE
+    //     this.setState({
+    //         value: event.target.value
+    //     });
+    // }
+    render() {
+        return (
+            <div className="EnterNewItem">
+                <form onSubmit={this.addList}>
+                    <input className="addNewItemText" ref={(input) => { this.textInput = input}} placeholder="Enter new item to your To Do list"></input>
+                    <input type="date" ref={(input) => { this.dateInput = input}}></input>
+                    <select onChange={this.handleSelect}>
+                        <option value="0">ITC</option>
+                        <option value="1">Ulpan</option>
+                        <option value="2">Chores</option>
+                    </select>
+                    <div>
+                        <List item={this.state.list} />
+                    </div>
+
+                </form>
+
+
+
+            </div>
+        );
+    }
+}
+
 class List extends React.Component {
+    constructor(props) {
+        super(props);
+
+    }
+
+    generateItemString(activity) {
+        var new_activity = `${activity.textInput} on ${activity.date}`;
+        return new_activity;
+    }
 
     render() {
         return (
-            <div className="example">
-            {this.props.object.textInput} on {this.props.object.dateInput}
+            <div className="list">
+                <ul>
+                    {this.props.list.map((activity, i) => <li key={i}><input type="checkbox" /> {this.generateItemString(activity)}</li>)}
+                </ul>
             </div>
         );
     }
