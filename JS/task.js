@@ -19,7 +19,7 @@ class Modal extends React.Component {
     render() {
         return (
             <div className="modalThing">
-                
+
             </div>
         );
     }
@@ -86,14 +86,25 @@ class EnterItem extends React.Component {
         var list = this.state.list;
         list.push(new_task);
         this.setState({
-            list: list
+            list: list,
+            categories: ["Chores"]
         })
+    }
+    handleSelect() {            //ALLOWS CATEGORY DROPDOWN MENU TO GET CATEGORIE VALUE
+        this.setState({
+            value: event.target.value
+        });
     }
     render() {
         return (
-            <div className="example">
+            <div className="EnterNewItem">
                 <input ref={(input) => { this.textInput = input; }}></input>
                 <input type="date" ref={(input) => { this.dateInput = input; }}></input>
+                <select onChange={this.handleSelect}>
+                    <option value="0">ITC</option>
+                    <option value="1">Ulpan</option>
+                    <option value="2">Chores</option>
+                </select>
                 <button onClick={this.getInput}> ENTER </button>
                 <List />
             </div>
