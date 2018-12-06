@@ -115,7 +115,7 @@ class EnterItem extends React.Component {
                         <option value="2">Chores</option>
                     </select>
                     <div>
-                        <List item={this.state.list} />
+                        <List list={this.state.list} />
                     </div>
 
                 </form>
