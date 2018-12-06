@@ -7,7 +7,7 @@ class App extends React.Component {
         return (
             <div className="background">
                 <Menu />
-                <ListItem />
+                <EnterItem />
             </div>
 
         )
@@ -16,37 +16,10 @@ class App extends React.Component {
 }
 
 class Modal extends React.Component {
-    constructor(props) {
-        super(props);
-        this.addList = this.addList.bind(this);
-        this.getInput = this.getInput.bind(this)
-        this.counter = 0;
-        this.state = {
-            list: [],
-        };
-    }
-    getInput() {
-        this.setState({
-            inputText: this.textInput.value,
-            inputDate: this.dateInput.value,
-        });
-        this.addList();
-    }
-    addList() {
-        var new_task = <li key={this.counter}>{this.textInput.value}  {this.dateInput.value}</li>
-        this.counter += 1;
-        var list = this.state.list;
-        list.push(new_task);
-        this.setState({
-            list: list
-        })
-    }
     render() {
         return (
-            <div className="enterToDoItem">
-                <input ref={(input) => { this.textInput = input; }}></input>
-                <input type="date" ref={(input) => { this.dateInput = input; }}></input>
-                <button onClick={this.getInput}> ENTER ITEM </button>
+            <div className="modalThing">
+                
             </div>
         );
     }
@@ -89,6 +62,46 @@ class Menu extends React.Component {
     }
 }
 
+
+class EnterItem extends React.Component {
+    constructor(props) {
+        super(props);
+        this.addList = this.addList.bind(this);
+        this.getInput = this.getInput.bind(this)
+        this.counter = 0;
+        this.state = {
+            list: [],
+        };
+    }
+    getInput() {
+        this.setState({
+            inputText: this.textInput.value,
+            inputDate: this.dateInput.value,
+        });
+        this.addList();
+    }
+    addList() {
+        var new_task = <li key={this.counter}>{this.textInput.value}  {this.dateInput.value}</li>
+        this.counter += 1;
+        var list = this.state.list;
+        list.push(new_task);
+        this.setState({
+            list: list
+        })
+    }
+    render() {
+        return (
+            <div className="example">
+                <input ref={(input) => { this.textInput = input; }}></input>
+                <input type="date" ref={(input) => { this.dateInput = input; }}></input>
+                <button onClick={this.getInput}> ENTER </button>
+                <List />
+            </div>
+        );
+    }
+}
+
+
 class List extends React.Component {
 
     render() {
@@ -98,37 +111,6 @@ class List extends React.Component {
         );
     }
 }
-
-class ListItem extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            arr: []
-        }
-        this.addTo = this.addTo.bind(this);
-    }
-
-    addTo() {
-        var item = this.state.arr;
-        var name = this.name.value;
-        item.push({
-            name
-        })
-        this.setState({
-            arr: item
-
-        })
-
-    }
-    render() {
-        return (
-            <div className="example">
-                <input ref={(input) => { this.name = input; }} type="text" placeholder="Type New List" id="list-item" />
-            </div>
-        );
-    }
-}
-
 
 
 
