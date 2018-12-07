@@ -13,15 +13,29 @@ class App extends React.Component {
     }
 }
 
-class Modal extends React.Component {
-    render() {
-        return (
-            <div className="modalThing">
+// //MODAL TO ALLOW TEXT EDITING. 
+// //NEED TO ADD TO MAP ON MAP <BUTTON ONCLICK={THIS.ONEDITCLICK}> EDIT </BUTT> TO PULL UP THIS MODAL
+// //NEED TO ALSO ADD BUTTON TO MAP TO ALLOW DELETING MODAL
+// class ModalEditText extends React.Component {
+//     constructor(props) {
+//         super(props);
+//         this.editItem = this.editItem.bind(this);
+//     editItem(event) {
+//         event.preventDefault();
+//         if (this.state.isEditing) {
 
-            </div>
-        );
-    }
-}
+//         }
+//     }
+//     render() {
+//         return (
+//             <div className="modalThing">
+//                 <form onSubmit={this.editItem}>
+//                     <input type="text" defaultValue={task} ref="editInput" />
+//                 </form>
+//             </div>
+//         );
+//     }
+// }
 
 class Menu extends React.Component {
     render() {
@@ -67,23 +81,21 @@ class Main extends React.Component {
         this.addItem = this.addItem.bind(this);
         this.counter = 0;
         this.state = {
-            categories: ["Chores"],
+            categories: ["Main", "ITC", "Ulpan", "Chores"],
             list: [],
             toDoArray: [],
-            completed: []
-
+            completed: [],
+            isEditing: false
         };
     }
     toggleItem(event) {
-    
-        var clickedItem = this.state.toDoArray.splice(this.state.toDoArray[event.target.value], 1);
-        console.log(clickedItem);
-        var newCompleted = this.state.completed.push(clickedItem);
-        var newToDo = this.state.toDoArray;
-        // var finishedTask = this.state.toDoArray;
-        // var new_task = event;
+        event.preventDefault();
+        var newToDoList = this.state.toDoArray
+        var oldCompletedList = this.state.completed
+        var clickedItem = newToDoList.splice([event.target.value], 1);
+        var newCompleted = oldCompletedList.push(clickedItem);
         this.setState({
-            toDoArray: newToDo,
+            toDoArray: newToDoList,
             completed: newCompleted
         })
         console.log(this.state.toDoArray)
@@ -100,7 +112,7 @@ class Main extends React.Component {
     render() {
         return (
             <div className="mainContainer">
-                <EnterItem input={this.addItem} />
+                <EnterItem categories={this.state.categories} input={this.addItem} />
                 <ToDoList toggleItem={this.toggleItem} toDoProp={this.state.toDoArray} />
                 <Done toggleItem={this.toggleItem} doneProp={this.state.completed} />
 
@@ -116,21 +128,27 @@ class EnterItem extends React.Component {
         // this.getInput = this.getInput.bind(this)
         this.counter = 0;
         this.state = {
+            categories: this.props.categories,
             list: [],
-            categories: ["ITC", "Ulpan", "Chores"]
         };
     }
     addList(event) {
         event.preventDefault();
-        var textInput = this.textInput.value;
-        var dateInput = this.dateInput.value;
-        var obj = {
-            textInput: textInput,
-            date: dateInput
+        if (this.textInput.value !== "") {      //PREVENT BLANK ENTRY   //MAY IMPLEMENT REGEX LATER
+            var textInput = this.textInput.value;
+            var dateInput = this.dateInput.value;
+            var obj = {
+                textInput: textInput,
+                date: dateInput
 
+            }
+            this.props.input(obj);
+            this.counter += 1;
+            this.textInput.value = "";      //CLEAR TEXT AFTER IT IS SAVED IN OBJ
         }
-        this.props.input(obj);
-        this.counter += 1;
+
+
+
     }
 
 
@@ -191,37 +209,37 @@ class ToDoList extends React.Component {
 class Done extends React.Component {
     constructor(props) {
         super(props);
-            super(props);
-            this.isChecked = this.isChecked.bind(this);
-            this.state = {
-                list: this.props.doneProp
-            };
+        super(props);
+        this.isChecked = this.isChecked.bind(this);
+        this.state = {
+            list: this.props.doneProp
+        };
 
-        }
-        isChecked(event) {
-            this.props.toggleItem(event);
-
-        }
-        //////this is passing an object not a string aka only text/////
-        generateDoneItemString(activity) {
-            var done_activity = `${activity.textInput} on ${activity.date}`;
-            return done_activity;
-        }
-
-        render() {
-            return (
-                /////needs to pass an object////
-            
-                <div className="completed-list">
-                    <h3>Completed items:</h3>
-                    <ul className="done-list">
-                        {this.state.list.map((activity, j) => <li key={j} ><input type="checkbox" onChange={this.isChecked} /> {this.generateDoneItemString(activity)}</li>)}
-                    </ul>
-                </div>
-            );
-        }
     }
-    
+    isChecked(event) {
+        this.props.toggleItem(event);
+
+    }
+    //////this is passing an object not a string aka only text/////
+    generateDoneItemString(activity) {
+        var done_activity = `${activity.textInput} on ${activity.date}`;
+        return done_activity;
+    }
+
+    render() {
+        return (
+            /////needs to pass an object////
+
+            <div className="completed-list">
+                <h3>Completed items:</h3>
+                <ul className="done-list">
+                    {this.state.list.map((activity, j) => <li key={j} ><input type="checkbox" onChange={this.isChecked} /> {this.generateDoneItemString(activity)}</li>)}
+                </ul>
+            </div>
+        );
+    }
+}
+
 
 function render() {
     ReactDOM.render(

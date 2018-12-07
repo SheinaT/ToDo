@@ -7,8 +7,20 @@ body {
   background-size:cover;
     
 }
+
 #root{
     position:relative;
+    justify-content: flex;
+    display: flex;
+}
+
+/* MAKE LIST ITEMS IN LINE (NO BULLET OR INDENT) */
+li {
+  list-style: none;
+}
+
+ul {
+  padding: 0;
 }
 
 .example{
@@ -92,15 +104,11 @@ form{
   width: 100%;
 }
 
-.main-list > li {
-  background: black;
-  color: white;
+.main-list li {
+  background-color: rgba(255, 255, 255, .5);
+  color: black;
   font-size: 18px;
   margin-top: 1vh;
-  margin-left: -18px;
-  opacity: 0.8;
-}
-
-li {
-  list-style: none;
+  border-radius: 5px;
+  transition: background-color .2s ease-out;
 }
