@@ -2,7 +2,6 @@ class App extends React.Component {
     constructor(props) {
         super(props);
     }
-
     render() {
         return (
             <div className="background">
@@ -11,7 +10,6 @@ class App extends React.Component {
             </div>
 
         )
-
     }
 }
 
@@ -66,43 +64,50 @@ class Main extends React.Component {
     constructor(props) {
         super(props);
         this.toggleItem = this.toggleItem.bind(this);
-        this.addItem =  this.addItem.bind(this);
+        this.addItem = this.addItem.bind(this);
         this.counter = 0;
         this.state = {
-            list: [],
             categories: ["Chores"],
-            todos: [],
+            list: [],
+            toDoArray: [],
             completed: []
 
         };
     }
     toggleItem(event) {
-        event.preventDefault();
+    
+        var clickedItem = this.state.toDoArray.splice(this.state.toDoArray[event.target.value], 1);
+        console.log(clickedItem);
+        var newCompleted = this.state.completed.push(clickedItem);
+        var newToDo = this.state.toDoArray;
+        // var finishedTask = this.state.toDoArray;
+        // var new_task = event;
         this.setState({
-            todos: newList
+            toDoArray: newToDo,
+            completed: newCompleted
         })
+        console.log(this.state.toDoArray)
+        console.log(this.state.completed);
     }
     addItem(obj) {
-        console.log(obj);
-        var newTodos = this.state.todos;
+        var newTodos = this.state.toDoArray;
         var newItem = obj;
         newTodos.push(newItem);
         this.setState({
-            todos: newTodos
+            toDoArray: newTodos,
         })
     }
     render() {
         return (
             <div className="mainContainer">
                 <EnterItem input={this.addItem} />
-                <ToDoList toggleItem={this.toggleItem} todos={this.state.todos} />
-                <Done toggleItem={this.toggleItem} dones={this.state.completed} />
+                <ToDoList toggleItem={this.toggleItem} toDoProp={this.state.toDoArray} />
+                <Done toggleItem={this.toggleItem} doneProp={this.state.completed} />
 
             </div>
         );
     }
 }
-
 
 class EnterItem extends React.Component {
     constructor(props) {
@@ -117,29 +122,18 @@ class EnterItem extends React.Component {
     }
     addList(event) {
         event.preventDefault();
-        var textInput=this.textInput.value;
-        var dateInput=this.dateInput.value;
+        var textInput = this.textInput.value;
+        var dateInput = this.dateInput.value;
         var obj = {
             textInput: textInput,
             date: dateInput
+
         }
         this.props.input(obj);
-
- 
+        this.counter += 1;
     }
-    
-       
-        // var new_task = {
-        //     textInput: this.textInput.value,
-        //     date: this.dateInput.value,
-        //     counter: this.counter
-        // }
-        // this.counter += 1;
-        // var newList = this.state.list;
-        // newList.push(new_task);
-        // this.setState({
-        //     list: newLi  // })
-    
+
+
     // handleSelect() {            //ALLOWS CATEGORY DROPDOWN MENU TO GET CATEGORIE VALUE
     //     this.setState({
     //         value: event.target.value
@@ -149,7 +143,7 @@ class EnterItem extends React.Component {
         return (
             <div className="EnterNewItem">
                 <form onSubmit={this.addList}>
-                    <input className="addNewItemText" ref={(input) => { this.textInput = input }}  placeholder="Enter new item to your To Do list"></input>
+                    <input className="addNewItemText" ref={(input) => { this.textInput = input }} placeholder="Enter new item to your To Do list"></input>
                     <input type="date" ref={(input) => { this.dateInput = input }}></input>
                     <select onChange={this.handleSelect}>
                         <option value="0">ITC</option>
@@ -168,14 +162,12 @@ class ToDoList extends React.Component {
         super(props);
         this.isChecked = this.isChecked.bind(this);
         this.state = {
-           list: this.props.todos
+            list: this.props.toDoProp
         };
 
     }
     isChecked(event) {
-        event.preventDefault();
         this.props.toggleItem(event);
-
     }
     //////this is passing an object not a string aka only text/////
     generateItemString(activity) {
@@ -187,8 +179,9 @@ class ToDoList extends React.Component {
         return (
             /////needs to pass an object////
             <div className="list">
+                <h3>To DO List: </h3>
                 <ul className="main-list">
-                    {this.state.list.map((activity, i) => <li key= {i} ><input type="checkbox" onChange={this.isChecked} /> {this.generateItemString(activity)}</li>)} 
+                    {this.state.list.map((activity, i) => <li key={i} ><input type="checkbox" value={i} onChange={this.isChecked} /> {this.generateItemString(activity)}</li>)}
                 </ul>
             </div>
         );
@@ -198,27 +191,42 @@ class ToDoList extends React.Component {
 class Done extends React.Component {
     constructor(props) {
         super(props);
-        // this.itemNotDone=this.itemNotDone.bind(this);
-        this.state = {
-            // doneList=[]
-        };
-    }
-    itemNotDone() {
+            super(props);
+            this.isChecked = this.isChecked.bind(this);
+            this.state = {
+                list: this.props.doneProp
+            };
 
-    }
+        }
+        isChecked(event) {
+            this.props.toggleItem(event);
 
-    render() {
-        return (
-            <div className="done-items">
-            </div>
-        );
+        }
+        //////this is passing an object not a string aka only text/////
+        generateDoneItemString(activity) {
+            var done_activity = `${activity.textInput} on ${activity.date}`;
+            return done_activity;
+        }
+
+        render() {
+            return (
+                /////needs to pass an object////
+            
+                <div className="completed-list">
+                    <h3>Completed items:</h3>
+                    <ul className="done-list">
+                        {this.state.list.map((activity, j) => <li key={j} ><input type="checkbox" onChange={this.isChecked} /> {this.generateDoneItemString(activity)}</li>)}
+                    </ul>
+                </div>
+            );
+        }
     }
-}
+    
 
 function render() {
     ReactDOM.render(
         <App />,
-        
+
         document.getElementById("root")
     );
 }
