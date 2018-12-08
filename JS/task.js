@@ -82,7 +82,6 @@ class Main extends React.Component {
         this.counter = 0;
         this.state = {
             categories: ["Main", "ITC", "Ulpan", "Chores"],
-            // list: [],
             toDoArray: [],
             completed: [],
             isEditing: false
@@ -90,20 +89,19 @@ class Main extends React.Component {
     }
     toggleItem(event, list) {
         // event.preventDefault();
-        var listItemIsIn=list==="toDoArray"?this.state.toDoArray: this.state.completed;
-        var listItemNotIn=list==="toDoArray"?this.state.completed: this.state.toDoArray;
-        var clickedItem=listItemIsIn[event.target.value];
-        console.log(clickedItem);
-       listItemIsIn.splice([event.target.value], 1);
-       listItemNotIn.push(clickedItem);
-       var newToDoList=this.state.toDoArray;
-       var newCompleted=this.state.completed;
+        var listItemIsIn = list === "toDoArray" ? this.state.toDoArray : this.state.completed;
+        var listItemNotIn = list === "toDoArray" ? this.state.completed : this.state.toDoArray;
+        var clickedItem = listItemIsIn[event.target.value];
+        listItemIsIn.splice([event.target.value], 1);
+        listItemNotIn.push(clickedItem);
+        var newToDoList = this.state.toDoArray;
+        var newCompleted = this.state.completed;
         this.setState({
             toDoArray: newToDoList,
             completed: newCompleted
         })
-  
     }
+
     addItem(obj) {
         var newTodos = this.state.toDoArray;
         var newItem = obj;
@@ -112,6 +110,7 @@ class Main extends React.Component {
             toDoArray: newTodos,
         })
     }
+
     render() {
         return (
             <div className="mainContainer">
@@ -139,20 +138,19 @@ class EnterItem extends React.Component {
         if (this.textInput.value !== "") {      //PREVENT BLANK ENTRY   //MAY IMPLEMENT REGEX LATER
             var textInput = this.textInput.value;
             var dateInput = this.dateInput.value;
+            var timeInput = this.timeInput.value;
             var obj = {
                 textInput: textInput,
-                date: dateInput
-
+                date: dateInput,
+                time: timeInput
             }
             this.props.input(obj);
             this.counter += 1;
-            this.textInput.value = "";      //CLEAR TEXT AFTER IT IS SAVED IN OBJ
+            this.textInput.value = "";      //CLEAR AFTER SAVED IN OBJ
+            this.dateInput.value = "";
+            this.timeInput.value = "";
         }
-
-
-
     }
-
 
     // handleSelect() {            //ALLOWS CATEGORY DROPDOWN MENU TO GET CATEGORIE VALUE
     //     this.setState({
@@ -165,13 +163,13 @@ class EnterItem extends React.Component {
                 <form onSubmit={this.addList}>
                     <input className="addNewItemText" ref={(input) => { this.textInput = input }} placeholder="Enter new item to your To Do list"></input>
                     <input type="date" ref={(input) => { this.dateInput = input }}></input>
+                    <input type="time" ref={(input) => { this.timeInput = input }}></input>
                     <select onChange={this.handleSelect}>
                         <option value="0">ITC</option>
                         <option value="1">Ulpan</option>
                         <option value="2">Chores</option>
                     </select>
                 </form>
-
             </div>
         );
     }
@@ -181,9 +179,6 @@ class ToDoList extends React.Component {
     constructor(props) {
         super(props);
         this.isChecked = this.isChecked.bind(this);
-        // this.state = {
-        //     list: this.props.toDoProp
-        // };
 
     }
     isChecked(event) {
@@ -191,10 +186,22 @@ class ToDoList extends React.Component {
     }
     //////this is passing an object not a string aka only text/////
     generateItemString(activity) {
-        var new_activity = `${activity.textInput} on ${activity.date}`;
+        if (activity.date === "" && activity.time === "") {
+            var new_activity_textonly = `${activity.textInput}`;
+            return new_activity_textonly;
+        }
+        else if (activity.date === "") {
+            var new_activity_dateless = `${activity.textInput} at ${activity.time}`;
+            return new_activity_dateless;
+        }
+        else if (activity.time === "") {
+            var new_activity_timeless = `${activity.textInput} on ${activity.date}`;
+            return new_activity_timeless;
+        }
+        var new_activity = `${activity.textInput} on ${activity.date} at ${activity.time}`;
         return new_activity;
     }
-    componentWillReceiveProps(){
+    componentWillReceiveProps() {
         this.render()
     }
 
@@ -204,7 +211,7 @@ class ToDoList extends React.Component {
             <div className="list">
                 <h3>To DO List: </h3>
                 <ul className="main-list">
-                    {this.props.toDoProp.map((activity, i) => <li key={i} ><input type="checkbox" value={i} onChange={this.isChecked} checked={false}/> {this.generateItemString(activity)}</li>)}
+                    {this.props.toDoProp.map((activity, i) => <li key={i} ><input type="checkbox" value={i} onChange={this.isChecked} checked={false} /> {this.generateItemString(activity)}</li>)}
                 </ul>
             </div>
         );
@@ -216,33 +223,40 @@ class Done extends React.Component {
         super(props);
         super(props);
         this.isChecked = this.isChecked.bind(this);
-        this.state = {
-            // list: this.props.doneProp
-        };
 
     }
     isChecked(event) {
         this.props.toggleItem(event, "doneArray");
-
     }
     //////this is passing an object not a string aka only text/////
     generateDoneItemString(activity) {
-        var done_activity = `${activity.textInput} on ${activity.date}`;
-        return done_activity;
+        if (activity.date === "" && activity.time === "") {
+            var new_activity_textonly = `${activity.textInput}`;
+            return new_activity_textonly;
+        }
+        else if (activity.date === "") {
+            var new_activity_dateless = `${activity.textInput} at ${activity.time}`;
+            return new_activity_dateless;
+        }
+        else if (activity.time === "") {
+            var new_activity_timeless = `${activity.textInput} on ${activity.date}`;
+            return new_activity_timeless;
+        }
+        var new_activity = `${activity.textInput} on ${activity.date} at ${activity.time}`;
+        return new_activity;
     }
 
-    componentWillReceiveProps(){
+    componentWillReceiveProps() {
         this.render()
     }
 
     render() {
         return (
             /////needs to pass an object////
-
             <div className="completed-list">
                 <h3>Completed items:</h3>
                 <ul className="done-list">
-                    {this.props.doneProp.map((activity, j) => <li key={j} ><input type="checkbox"  value={j} onChange={this.isChecked}  checked={true}/> {this.generateDoneItemString(activity)}</li>)}
+                    {this.props.doneProp.map((activity, j) => <li key={j} ><input type="checkbox" value={j} onChange={this.isChecked} checked={true} /> {this.generateDoneItemString(activity)}</li>)}
                 </ul>
             </div>
         );
@@ -253,7 +267,6 @@ class Done extends React.Component {
 function render() {
     ReactDOM.render(
         <App />,
-
         document.getElementById("root")
     );
 }
