@@ -71,13 +71,9 @@ form{
 }
   
 #sidebar .sidebar-header {
-  padding: 20px;
-  background: #6d7fcc;
+  padding: 18px;
+  background: rgb(73, 115, 139);
 }
-.logo{
-  opacity:0.8
-}
-
 
 .navbar {
   justify-content: center;
@@ -90,6 +86,10 @@ form{
 #sidebarCollapse {
   max-width: 20vw;
   overflow: hidden;
+}
+.logo{
+  stop-opacity: initial;
+  opacity: 1;
 }
 
 
@@ -126,15 +126,38 @@ input[type="date"]{
   border-radius:5px;
 }
 
-
-
-
-
-
 /* -------------- MAIN LIST ------------- */
 .toDoListContainer {
   width: 100%;
 }
+
+.list{
+  color: rgb(250, 193, 200);
+  font-size: 40px;
+  background: rgb(99, 100, 107, 0.8);
+  border-radius:10px;
+  width:20%;
+
+  text-shadow:
+  -1px -1px 0 #000,
+  1px -1px 0 #000,
+  -1px 1px 0 #000,
+  1px 1px 0 #000;
+}
+
+.completed-list{
+  color: rgb(169, 196, 169);
+  font-size: 40px;
+  background: rgb(99, 100, 107, 0.8);
+  border-radius:10px;
+  width:20%;
+  text-shadow:
+  -1px -1px 0 #000,
+  1px -1px 0 #000,
+  -1px 1px 0 #000,
+  1px 1px 0 #000;
+}
+
 
 .main-list {
   width: 100%;
@@ -143,6 +166,7 @@ input[type="date"]{
 .main-list li {
   background-color: rgba(187, 106, 106, 0.5);
   color: black;
+  text-shadow:none;
   font-size: 18px;
   margin-top: 1vh;
   border-radius: 5px;
@@ -153,6 +177,7 @@ input[type="date"]{
 .completed-list li {
   background-color: rgba(116, 155, 145, 0.5);
   text-decoration:line-through;
+  text-shadow:none;
   color: black;
   font-size: 18px;
   margin-top: 1vh;
