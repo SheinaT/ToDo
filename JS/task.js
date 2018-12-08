@@ -20,26 +20,13 @@ class Menu extends React.Component {
             <div className="wrapper">
                 <nav id="sidebar">
                     <div className="sidebar-header">
-                        <h3>Get Shit Done</h3>
+                        <h1>TaskTrip!</h1>
                         <img className="logo" src="./CSS/Images/task.png"></img>
                     </div>
-
                     <div id="content">
                         <nav className="navbar navbar-default">
                             <div className="container-fluid">
-                                <div className="navbar-header">
-                                    <button type="button" id="sidebarCollapse" className="btn btn-info navbar-btn">
-                                        <i className="glyphicon glyphicon-align-left"></i>
-                                        <span>Toggle Sidebar</span>
-                                    </button>
-                                </div>
                                 <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                                    <ul className="nav navbar-nav navbar-right">
-                                        <li><a href="#">Page</a></li>
-                                        <li><a href="#">Page</a></li>
-                                        <li><a href="#">Page</a></li>
-                                        <li><a href="#">Page</a></li>
-                                    </ul>
                                 </div>
                             </div>
                         </nav>
@@ -87,7 +74,7 @@ class Main extends React.Component {
             toDoArray: newTodos,
         })
     }
-
+    ////We left the console.log here as we are still trying to figure out our bug with our editing modal(which is currently hidden)
     updateItem(updatedObj, index) {
         var newArray = this.state.toDoArray;
         newArray.splice(index, 1);
@@ -106,7 +93,7 @@ class Main extends React.Component {
             toDoArray: newArray,
             edit: false
         })
-        console.log(this.state)
+
     }
     componentWillReceiveProps() {
         this.render();
@@ -119,7 +106,7 @@ class Main extends React.Component {
                     toDoProp={this.state.toDoArray}
                     handleUpdateItem={this.updateItem}
                     handleDeleteItem={this.deleteItem}
-                    stopEditing={this.state.edit} 
+                    stopEditing={this.state.edit}
                     finalHandle={this.deleteItem} />
                 <Done toggleItem={this.toggleItem} doneProp={this.state.completed} />
             </div>
@@ -135,7 +122,7 @@ class EnterItem extends React.Component {
     }
     addList(event) {
         event.preventDefault();
-        if (this.textInput.value !== "") {      //PREVENT BLANK ENTRY   //MAY IMPLEMENT REGEX LATER
+        if (this.textInput.value !== "") {      //PREVENT BLANK ENTRY   
             var textInput = this.textInput.value;
             var dateInput = this.dateInput.value;
             var timeInput = this.timeInput.value;
@@ -194,7 +181,7 @@ class ToDoList extends React.Component {
         var new_activity = `${activity.textInput} on ${activity.date} at ${activity.time}`;
         return new_activity;
     }
-
+    ///we have hidden our edit button and left a console.log since we had a bug trying to implement our modal with editing capabilities
     editItemFunc() {
         this.setState({
             isEditing: true
@@ -205,9 +192,8 @@ class ToDoList extends React.Component {
     deleteItemFunc(event) {
         event.preventDefault();
         var index = event.target.value;
-        console.log(index);
         this.props.finalHandle(index)
-        // this.props.handleDelete(index);
+
     }
 
     componentWillUpdate() {
@@ -224,9 +210,9 @@ class ToDoList extends React.Component {
             <div className="list">
                 <h3>To Do List: </h3>
                 <ul className="main-list">
-                    {this.props.toDoProp.map((activity, i) => <li key={i} ><input type="checkbox" value={i} onChange={this.isChecked} checked={false} /> {this.generateItemString(activity)} 
-                    <button onClick={this.deleteItemFunc} className="delete-button" value={i}> Delete </button> 
-                    <button onClick={this.editItemFunc} className="edit-button" value={i}> EDIT </button>  </li>)}
+                    {this.props.toDoProp.map((activity, i) => <li key={i} ><input type="checkbox" value={i} onChange={this.isChecked} checked={false} /> {this.generateItemString(activity)}
+                        <button onClick={this.deleteItemFunc} className="delete-button" value={i}> Delete </button>
+                        <button onClick={this.editItemFunc} className="edit-button" value={i}> EDIT </button>  </li>)}
                 </ul>
                 {displayEditModal}
             </div>
