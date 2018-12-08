@@ -13,50 +13,6 @@ class App extends React.Component {
     }
 }
 
-class ModalEditText extends React.Component {
-    constructor(props) {
-        super(props);
-        this.preventDefault = this.preventDefault.bind(this);
-        // this.updatedItem = this.updateItem.bind(this);
-        this.deleteItem = this.deleteItem.bind(this);
-    }
-    preventDefault(event) {
-        event.preventDefault();
-    }
-    // updateItem(event) {
-    //     event.preventDefault();
-    //     var textInput = this.textInput.value;
-    //     var dateInput = this.dateInput.value;
-    //     var timeInput = this.timeInput.value;
-    //     var updatedObj = {
-    //         textInput: textInput,
-    //         date: dateInput,
-    //         time: timeInput
-    //     }
-    //     var index = this.props.editItemIndex;
-    //     this.props.handleUpdate(updatedObj, index);
-    // }
-    deleteItem(event) {
-        event.preventDefault();
-        var index = this.props.editItemIndex;
-        this.props.handleDelete(index);
-    }
-    render() {
-        return (
-            <div className="editModal">
-                <form onSubmit={this.preventDefault}>
-                    <input defaultValue={this.props.editItem.textInput} className="addNewItemText" ref={(input) => { this.textInput = input }}></input>
-                    <input defaultValue={this.props.editItem.date} type="date" ref={(input) => { this.dateInput = input }}></input>
-                    <input defaultValue={this.props.editItem.time} type="time" ref={(input) => { this.timeInput = input }}></input>
-                    <br />
-                    <button onClick={this.editItem}>Save</button>
-                    <button onClick={this.deleteItem}>Delete</button>
-                </form>
-            </div>
-        );
-    }
-}
-
 class Menu extends React.Component {
     render() {
         return (
@@ -101,7 +57,7 @@ class Main extends React.Component {
         this.toggleItem = this.toggleItem.bind(this);
         this.addItem = this.addItem.bind(this);
         this.counter = 0;
-        // this.updateItem = this.updateItem.bind(this);
+        this.updateItem = this.updateItem.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
         this.state = {
             toDoArray: [],
@@ -132,17 +88,16 @@ class Main extends React.Component {
         })
     }
 
-    // updateItem(updatedObj, index) {
-    //     var newArray = this.state.toDoArray;
-    //     newArray.splice(index, 1);
-    //     console.log(this.state.toDoArray);
-    //     newArray.push(updatedObj);
-    //     this.setState({
-    //         toDoArray: newArray,
-    //     })
-    //     console.log(this.state.toDoArray);
-
-    // }
+    updateItem(updatedObj, index) {
+        var newArray = this.state.toDoArray;
+        newArray.splice(index, 1);
+        console.log(this.state.toDoArray);
+        newArray.push(updatedObj);
+        this.setState({
+            toDoArray: newArray,
+        })
+        console.log(this.state.toDoArray);
+    }
 
     deleteItem(index) {
         var newArray = this.state.toDoArray;
@@ -162,9 +117,10 @@ class Main extends React.Component {
                 <EnterItem input={this.addItem} />
                 <ToDoList toggleItem={this.toggleItem}
                     toDoProp={this.state.toDoArray}
-                    // handleUpdateItem={this.updateItem}
+                    handleUpdateItem={this.updateItem}
                     handleDeleteItem={this.deleteItem}
-                    stopEditing={this.state.edit} />
+                    stopEditing={this.state.edit} 
+                    finalHandle={this.deleteItem} />
                 <Done toggleItem={this.toggleItem} doneProp={this.state.completed} />
             </div>
         );
@@ -175,7 +131,6 @@ class EnterItem extends React.Component {
     constructor(props) {
         super(props);
         this.addList = this.addList.bind(this);
-        // this.getInput = this.getInput.bind(this)
         this.counter = 0;
     }
     addList(event) {
@@ -215,6 +170,7 @@ class ToDoList extends React.Component {
         super(props);
         this.isChecked = this.isChecked.bind(this);
         this.editItemFunc = this.editItemFunc.bind(this);
+        this.deleteItemFunc = this.deleteItemFunc.bind(this);
         this.state = {
             isEditing: this.props.stopEditing
         }
@@ -222,7 +178,6 @@ class ToDoList extends React.Component {
     isChecked(event) {
         this.props.toggleItem(event, "toDoArray");
     }
-    //////this is passing an object not a string aka only text/////
     generateItemString(activity) {
         if (activity.date === "" && activity.time === "") {
             var new_activity_textonly = `${activity.textInput}`;
@@ -239,15 +194,26 @@ class ToDoList extends React.Component {
         var new_activity = `${activity.textInput} on ${activity.date} at ${activity.time}`;
         return new_activity;
     }
+
     editItemFunc() {
         this.setState({
             isEditing: true
         });
         console.log(this.state.isEditing)
     }
-    componentWillReceiveProps() {
+
+    deleteItemFunc(event) {
+        event.preventDefault();
+        var index = event.target.value;
+        console.log(index);
+        this.props.finalHandle(index)
+        // this.props.handleDelete(index);
+    }
+
+    componentWillUpdate() {
         this.render();
     }
+
     render() {
         var displayEditModal = this.state.isEditing ? <ModalEditText
             handleUpdate={this.props.handleUpdateItem}
@@ -258,7 +224,9 @@ class ToDoList extends React.Component {
             <div className="list">
                 <h3>To Do List: </h3>
                 <ul className="main-list">
-                    {this.props.toDoProp.map((activity, i) => <li key={i} ><input type="checkbox" value={i} onChange={this.isChecked} checked={false} /> {this.generateItemString(activity)} <button onClick={this.editItemFunc} className="edit-button" value={i}> EDIT </button> </li>)}
+                    {this.props.toDoProp.map((activity, i) => <li key={i} ><input type="checkbox" value={i} onChange={this.isChecked} checked={false} /> {this.generateItemString(activity)} 
+                    <button onClick={this.editItemFunc} className="edit-button" value={i}> EDIT </button> 
+                    <button onClick={this.deleteItemFunc} className="delete-button" value={i}> Delete </button> </li>)}
                 </ul>
                 {displayEditModal}
             </div>
@@ -266,9 +234,53 @@ class ToDoList extends React.Component {
     }
 }
 
-class Done extends React.Component {
+class ModalEditText extends React.Component {
     constructor(props) {
         super(props);
+        this.preventDefault = this.preventDefault.bind(this);
+        this.updatedItem = this.updateItem.bind(this);
+        this.deleteItem = this.deleteItem.bind(this);
+    }
+    preventDefault(event) {
+        event.preventDefault();
+    }
+    updateItem(event) {
+        event.preventDefault();
+        var textInput = this.textInput.value;
+        var dateInput = this.dateInput.value;
+        var timeInput = this.timeInput.value;
+        var updatedObj = {
+            textInput: textInput,
+            date: dateInput,
+            time: timeInput
+        }
+        var index = this.props.editItemIndex;
+        this.props.handleUpdate(updatedObj, index);
+    }
+    deleteItem(event) {
+        event.preventDefault();
+        var index = this.props.editItemIndex;
+        this.props.handleDelete(index);
+    }
+    render() {
+        return (
+            <div className="editModal">
+                <form onSubmit={this.preventDefault}>
+                    <input defaultValue={this.props.editItem.textInput} className="addNewItemText" ref={(input) => { this.textInput = input }}></input>
+                    <input defaultValue={this.props.editItem.date} type="date" ref={(input) => { this.dateInput = input }}></input>
+                    <input defaultValue={this.props.editItem.time} type="time" ref={(input) => { this.timeInput = input }}></input>
+                    <br />
+                    <button onClick={this.updateItem}>Save</button>
+                    <button onClick={this.deleteItem}>Delete</button>
+                </form>
+            </div>
+        );
+    }
+}
+
+
+class Done extends React.Component {
+    constructor(props) {
         super(props);
         this.isChecked = this.isChecked.bind(this);
 
@@ -295,9 +307,8 @@ class Done extends React.Component {
     }
 
     componentWillReceiveProps() {
-        this.render()
+        this.render();
     }
-
     render() {
         return (
             /////needs to pass an object////
