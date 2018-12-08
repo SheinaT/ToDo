@@ -13,22 +13,21 @@ class App extends React.Component {
     }
 }
 
-//MODAL TO ALLOW TEXT EDITING. 
-//NEED TO ADD TO MAP ON MAP <BUTTON ONCLICK={THIS.ONEDITCLICK}> EDIT </BUTTON> TO PULL UP THIS MODAL
-//NEED TO ALSO ADD BUTTON TO MAP TO ALLOW DELETING MODAL
+// MODAL TO ALLOW TEXT EDITING. 
+// NEED TO ADD TO MAP ON MAP <BUTTON ONCLICK={THIS.ONEDITCLICK}> EDIT </BUTTON> TO PULL UP THIS MODAL
+// NEED TO ALSO ADD BUTTON TO MAP TO ALLOW DELETING MODAL
 // class ModalEditText extends React.Component {
 //     constructor(props) {
 //         super(props);
 //         this.editItem = this.editItem.bind(this);
-//     editItem(event) {
+//     editItem() {
 //         event.preventDefault();
 //         if (this.state.isEditing) {
-
 //         }
 //     }
 //     render() {
 //         return (
-//             <div className="modalThing">
+//             <div className="editModal">
 //                 <form onSubmit={this.editItem}>
 //                     <input type="text" defaultValue={task} ref="editInput" />
 //                 </form>
