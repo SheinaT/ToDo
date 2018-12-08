@@ -16,10 +16,14 @@ class App extends React.Component {
 class ModalEditText extends React.Component {
     constructor(props) {
         super(props);
-        // this.editItem = this.editItem.bind(this);
+        this.preventDefault = this.preventDefault.bind(this);
+        this.editItem = this.editItem.bind(this);
     }
-    // editItem() {
-    //     event.preventDefault();
+    preventDefault(event) {
+        event.preventDefault();
+    }
+    editItem(event) {
+        event.preventDefault();
     //     if (this.state.isEditing) {
     //         var textInput = this.textInput.value;
     //         var dateInput = this.dateInput.value;
@@ -35,16 +39,16 @@ class ModalEditText extends React.Component {
     //         this.dateInput.value = "";
     //         this.timeInput.value = "";
     //     }
-    // }
+    }
     render() {
         return (
             <div className="editModal">
-                <form onSubmit={this.editItem}>
+                <form onSubmit={this.preventDefault}>
                     <input className="addNewItemText" ref={(input) => { this.textInput = input }} placeholder="Enter new item to your To Do list"></input>
                     <input type="date" ref={(input) => { this.dateInput = input }}></input>
                     <input type="time" ref={(input) => { this.timeInput = input }}></input>
                     <br/>
-                    <button>Save</button>
+                    <button onSubmit={this.editItem}>Save</button>
                     <button>Delete</button> 
                 </form>
             </div>
