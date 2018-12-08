@@ -19,6 +19,7 @@ class ModalEditText extends React.Component {
         this.preventDefault = this.preventDefault.bind(this);
         this.editItem = this.editItem.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
+
     }
     preventDefault(event) {
         event.preventDefault();
@@ -42,11 +43,14 @@ class ModalEditText extends React.Component {
         var index = event.target.value;
         this.props.handleDelete(index);
     }
+
+    
+
     render() {
         return (
             <div className="editModal">
                 <form onSubmit={this.preventDefault}>
-                    <input defaultValue={this.props.editItem.textInput} className="addNewItemText" ref={(input) => { this.textInput = input }}></input>
+                    <input defaultValue={this.props.editItem.textInput} className="addNewItemText" type="text" ref={(input) => { this.textInput = input } }></input>
                     <input defaultValue={this.props.editItem.date} type="date" ref={(input) => { this.dateInput = input }}></input>
                     <input defaultValue={this.props.editItem.time} type="time" ref={(input) => { this.timeInput = input }}></input>
                     <br />
@@ -128,7 +132,7 @@ class Main extends React.Component {
 
     updateItem(updatedObj, index) {
         var newArray = this.state.toDoArray;
-        // newArray.splice(index, 1);
+        newArray.splice(index,1);
         console.log(updatedObj);
         console.log(this.state.toDoArray);
         newArray.push(updatedObj);
@@ -141,7 +145,7 @@ class Main extends React.Component {
     deleteItem(index) {
         console.log(index);
         var newArray = this.state.toDoArray;
-        // newArray.splice(index, 1);
+        newArray.splice(index, 1);
         this.setState({
             toDoArray: newArray,
         })
@@ -236,16 +240,19 @@ class ToDoList extends React.Component {
         this.render()
     }
     editItem(event) {
+       
         this.setState({
             isEditing: true
         });
-        // console.log(this.props.toDoProp[event.target.value].textInput)
+        console.log(this.props.toDoProp[event.target.value].textInput)
     }
+   
     render() {
         var displayEditModal = this.state.isEditing ? <ModalEditText
             handleUpdate={this.props.handleUpdateItem}
             handleDelete={this.props.handleDeleteItem}
             editItem={this.props.toDoProp[event.target.value]} /> : null;
+
         return (
             /////needs to pass an object////
             <div className="list">
