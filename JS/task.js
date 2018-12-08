@@ -45,6 +45,7 @@ class Menu extends React.Component {
                 <nav id="sidebar">
                     <div className="sidebar-header">
                         <h3>Bootstrap Sidebar</h3>
+                        <img class="logo" src="./CSS/Images/task.png"></img>
                     </div>
 
                     <div id="content">
@@ -162,13 +163,13 @@ class EnterItem extends React.Component {
     render() {
         return (
             <div className="EnterNewItem">
-                <form onSubmit={this.addList}>
+                <form className="submit" onSubmit={this.addList}>
                     <input className="addNewItemText" ref={(input) => { this.textInput = input }} placeholder="Enter new item to your To Do list"></input>
                     <input type="date" ref={(input) => { this.dateInput = input }}></input>
                     <select onChange={this.handleSelect}>
-                        <option value="0">ITC</option>
-                        <option value="1">Ulpan</option>
-                        <option value="2">Chores</option>
+                        <option id="itc" value="0">ITC</option>
+                        <option id="ulpan" value="1">Ulpan</option>
+                        <option id="chores" value="2">Chores</option>
                     </select>
                 </form>
 
