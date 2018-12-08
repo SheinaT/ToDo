@@ -13,9 +13,9 @@ class App extends React.Component {
     }
 }
 
-// //MODAL TO ALLOW TEXT EDITING. 
-// //NEED TO ADD TO MAP ON MAP <BUTTON ONCLICK={THIS.ONEDITCLICK}> EDIT </BUTT> TO PULL UP THIS MODAL
-// //NEED TO ALSO ADD BUTTON TO MAP TO ALLOW DELETING MODAL
+//MODAL TO ALLOW TEXT EDITING. 
+//NEED TO ADD TO MAP ON MAP <BUTTON ONCLICK={THIS.ONEDITCLICK}> EDIT </BUTTON> TO PULL UP THIS MODAL
+//NEED TO ALSO ADD BUTTON TO MAP TO ALLOW DELETING MODAL
 // class ModalEditText extends React.Component {
 //     constructor(props) {
 //         super(props);
@@ -179,7 +179,7 @@ class ToDoList extends React.Component {
     constructor(props) {
         super(props);
         this.isChecked = this.isChecked.bind(this);
-
+        this.editItem = this.editItem.bind(this);
     }
     isChecked(event) {
         this.props.toggleItem(event, "toDoArray");
@@ -204,14 +204,16 @@ class ToDoList extends React.Component {
     componentWillReceiveProps() {
         this.render()
     }
-
+    editItem(event) {
+        console.log(event)
+    }
     render() {
         return (
             /////needs to pass an object////
             <div className="list">
                 <h3>To DO List: </h3>
                 <ul className="main-list">
-                    {this.props.toDoProp.map((activity, i) => <li key={i} ><input type="checkbox" value={i} onChange={this.isChecked} checked={false} /> {this.generateItemString(activity)}</li>)}
+                    {this.props.toDoProp.map((activity, i) => <li key={i} ><input type="checkbox" value={i} onChange={this.isChecked} checked={false} /> {this.generateItemString(activity)} <button onClick={this.editItem} className="edit-button"> EDIT </button> </li>)}
                 </ul>
             </div>
         );
