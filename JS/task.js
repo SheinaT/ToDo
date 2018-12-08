@@ -225,8 +225,8 @@ class ToDoList extends React.Component {
                 <h3>To Do List: </h3>
                 <ul className="main-list">
                     {this.props.toDoProp.map((activity, i) => <li key={i} ><input type="checkbox" value={i} onChange={this.isChecked} checked={false} /> {this.generateItemString(activity)} 
-                    <button onClick={this.editItemFunc} className="edit-button" value={i}> EDIT </button> 
-                    <button onClick={this.deleteItemFunc} className="delete-button" value={i}> Delete </button> </li>)}
+                    <button onClick={this.deleteItemFunc} className="delete-button" value={i}> Delete </button> 
+                    <button onClick={this.editItemFunc} className="edit-button" value={i}> EDIT </button>  </li>)}
                 </ul>
                 {displayEditModal}
             </div>

@@ -197,6 +197,8 @@ input[type="date"]{
 }
 
 .edit-button {
+  float: right;
+  margin-left: 2vw;
   display: none;
 }
 
