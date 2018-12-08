@@ -205,7 +205,7 @@ class ToDoList extends React.Component {
         this.render()
     }
     editItem(event) {
-        console.log(event)
+        console.log(event.target.value)
     }
     render() {
         return (
@@ -213,7 +213,7 @@ class ToDoList extends React.Component {
             <div className="list">
                 <h3>To DO List: </h3>
                 <ul className="main-list">
-                    {this.props.toDoProp.map((activity, i) => <li key={i} ><input type="checkbox" value={i} onChange={this.isChecked} checked={false} /> {this.generateItemString(activity)} <button onClick={this.editItem} className="edit-button"> EDIT </button> </li>)}
+                    {this.props.toDoProp.map((activity, i) => <li key={i} ><input type="checkbox" value={i} onChange={this.isChecked} checked={false} /> {this.generateItemString(activity)} <button onClick={this.editItem} className="edit-button" value={i}> EDIT </button> </li>)}
                 </ul>
             </div>
         );
