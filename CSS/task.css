@@ -164,9 +164,9 @@ input[type="date"]{
 
 /*---Modal---*/
 .editModal{
-  display:none;
-  position:absolute;
-  width:200px;
-  height:200px;
-
+  position: fixed;
+  top: 10vh;
+  margin: auto;
+  background: black;
+  font: white;
 }
