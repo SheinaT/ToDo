@@ -17,25 +17,25 @@ class ModalEditText extends React.Component {
     constructor(props) {
         super(props);
         this.preventDefault = this.preventDefault.bind(this);
-        this.updatedItem = this.updateItem.bind(this);
+        // this.updatedItem = this.updateItem.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
     }
     preventDefault(event) {
         event.preventDefault();
     }
-    updateItem(event) {
-        event.preventDefault();
-        var textInput = this.textInput.value;
-        var dateInput = this.dateInput.value;
-        var timeInput = this.timeInput.value;
-        var updatedObj = {
-            textInput: textInput,
-            date: dateInput,
-            time: timeInput
-        }
-        var index = this.props.editItemIndex;
-        this.props.handleUpdate(updatedObj, index);
-    }
+    // updateItem(event) {
+    //     event.preventDefault();
+    //     var textInput = this.textInput.value;
+    //     var dateInput = this.dateInput.value;
+    //     var timeInput = this.timeInput.value;
+    //     var updatedObj = {
+    //         textInput: textInput,
+    //         date: dateInput,
+    //         time: timeInput
+    //     }
+    //     var index = this.props.editItemIndex;
+    //     this.props.handleUpdate(updatedObj, index);
+    // }
     deleteItem(event) {
         event.preventDefault();
         var index = this.props.editItemIndex;
@@ -101,10 +101,9 @@ class Main extends React.Component {
         this.toggleItem = this.toggleItem.bind(this);
         this.addItem = this.addItem.bind(this);
         this.counter = 0;
-        this.updateItem = this.updateItem.bind(this);
+        // this.updateItem = this.updateItem.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
         this.state = {
-            categories: ["Main", "ITC", "Ulpan", "Chores"],
             toDoArray: [],
             completed: [],
             edit: false
@@ -133,36 +132,39 @@ class Main extends React.Component {
         })
     }
 
-    updateItem(updatedObj, index) {
-        var newArray = this.state.toDoArray;
-        newArray.splice(index, 1);
-        console.log(updatedObj);
-        console.log(this.state.toDoArray);
-        newArray.push(updatedObj);
-        console.log(newArray);
-        this.setState({
-            toDoArray: newArray,
-        })
-    }
+    // updateItem(updatedObj, index) {
+    //     var newArray = this.state.toDoArray;
+    //     newArray.splice(index, 1);
+    //     console.log(this.state.toDoArray);
+    //     newArray.push(updatedObj);
+    //     this.setState({
+    //         toDoArray: newArray,
+    //     })
+    //     console.log(this.state.toDoArray);
+
+    // }
 
     deleteItem(index) {
         var newArray = this.state.toDoArray;
         newArray.splice(index, 1);
         this.setState({
             toDoArray: newArray,
+            edit: false
         })
-        console.log(this.state.toDoArray)
+        console.log(this.state)
     }
-
+    componentWillReceiveProps() {
+        this.render();
+    }
     render() {
         return (
             <div className="mainContainer">
-                <EnterItem categories={this.state.categories} input={this.addItem} />
+                <EnterItem input={this.addItem} />
                 <ToDoList toggleItem={this.toggleItem}
                     toDoProp={this.state.toDoArray}
-                    handleUpdateItem={this.updateItem}
-                    handleDeleteItem={this.deleteItem} 
-                    stopEditing={this.state.edit}/>
+                    // handleUpdateItem={this.updateItem}
+                    handleDeleteItem={this.deleteItem}
+                    stopEditing={this.state.edit} />
                 <Done toggleItem={this.toggleItem} doneProp={this.state.completed} />
             </div>
         );
@@ -175,9 +177,6 @@ class EnterItem extends React.Component {
         this.addList = this.addList.bind(this);
         // this.getInput = this.getInput.bind(this)
         this.counter = 0;
-        this.state = {
-            categories: this.props.categories,
-        };
     }
     addList(event) {
         event.preventDefault();
@@ -240,19 +239,20 @@ class ToDoList extends React.Component {
         var new_activity = `${activity.textInput} on ${activity.date} at ${activity.time}`;
         return new_activity;
     }
-    componentWillReceiveProps() {
-        this.render();
-    }
     editItemFunc() {
         this.setState({
             isEditing: true
         });
+        console.log(this.state.isEditing)
+    }
+    componentWillReceiveProps() {
+        this.render();
     }
     render() {
         var displayEditModal = this.state.isEditing ? <ModalEditText
             handleUpdate={this.props.handleUpdateItem}
             handleDelete={this.props.handleDeleteItem}
-            editItem={this.props.toDoProp[event.target.value]} 
+            editItem={this.props.toDoProp[event.target.value]}
             editItemIndex={event.target.value} /> : null;
         return (
             <div className="list">
