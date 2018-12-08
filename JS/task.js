@@ -42,10 +42,12 @@ class Menu extends React.Component {
         return (
 
             <div className="wrapper">
+            
                 <nav id="sidebar">
                     <div className="sidebar-header">
-                        <h3>Bootstrap Sidebar</h3>
-                        <img class="logo" src="./CSS/Images/task.png"></img>
+                    <img className="logo" src="./CSS/Images/task.png"></img>
+                    <h1>Header</h1>
+                    
                     </div>
 
                     <div id="content">
@@ -54,7 +56,6 @@ class Menu extends React.Component {
                                 <div className="navbar-header">
                                     <button type="button" id="sidebarCollapse" className="btn btn-info navbar-btn">
                                         <i className="glyphicon glyphicon-align-left"></i>
-                                        <span>Toggle Sidebar</span>
                                     </button>
                                 </div>
                                 <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
