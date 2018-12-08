@@ -82,24 +82,27 @@ class Main extends React.Component {
         this.counter = 0;
         this.state = {
             categories: ["Main", "ITC", "Ulpan", "Chores"],
-            list: [],
+            // list: [],
             toDoArray: [],
             completed: [],
             isEditing: false
         };
     }
-    toggleItem(event) {
-        event.preventDefault();
-        var newToDoList = this.state.toDoArray
-        var oldCompletedList = this.state.completed
-        var clickedItem = newToDoList.splice([event.target.value], 1);
-        var newCompleted = oldCompletedList.push(clickedItem);
+    toggleItem(event, list) {
+        // event.preventDefault();
+        var listItemIsIn=list==="toDoArray"?this.state.toDoArray: this.state.completed;
+        var listItemNotIn=list==="toDoArray"?this.state.completed: this.state.toDoArray;
+        var clickedItem=listItemIsIn[event.target.value];
+        console.log(clickedItem);
+       listItemIsIn.splice([event.target.value], 1);
+       listItemNotIn.push(clickedItem);
+       var newToDoList=this.state.toDoArray;
+       var newCompleted=this.state.completed;
         this.setState({
             toDoArray: newToDoList,
             completed: newCompleted
         })
-        console.log(this.state.toDoArray)
-        console.log(this.state.completed);
+  
     }
     addItem(obj) {
         var newTodos = this.state.toDoArray;
@@ -129,7 +132,6 @@ class EnterItem extends React.Component {
         this.counter = 0;
         this.state = {
             categories: this.props.categories,
-            list: [],
         };
     }
     addList(event) {
@@ -179,18 +181,21 @@ class ToDoList extends React.Component {
     constructor(props) {
         super(props);
         this.isChecked = this.isChecked.bind(this);
-        this.state = {
-            list: this.props.toDoProp
-        };
+        // this.state = {
+        //     list: this.props.toDoProp
+        // };
 
     }
     isChecked(event) {
-        this.props.toggleItem(event);
+        this.props.toggleItem(event, "toDoArray");
     }
     //////this is passing an object not a string aka only text/////
     generateItemString(activity) {
         var new_activity = `${activity.textInput} on ${activity.date}`;
         return new_activity;
+    }
+    componentWillReceiveProps(){
+        this.render()
     }
 
     render() {
@@ -199,7 +204,7 @@ class ToDoList extends React.Component {
             <div className="list">
                 <h3>To DO List: </h3>
                 <ul className="main-list">
-                    {this.state.list.map((activity, i) => <li key={i} ><input type="checkbox" value={i} onChange={this.isChecked} /> {this.generateItemString(activity)}</li>)}
+                    {this.props.toDoProp.map((activity, i) => <li key={i} ><input type="checkbox" value={i} onChange={this.isChecked} checked={false}/> {this.generateItemString(activity)}</li>)}
                 </ul>
             </div>
         );
@@ -212,18 +217,22 @@ class Done extends React.Component {
         super(props);
         this.isChecked = this.isChecked.bind(this);
         this.state = {
-            list: this.props.doneProp
+            // list: this.props.doneProp
         };
 
     }
     isChecked(event) {
-        this.props.toggleItem(event);
+        this.props.toggleItem(event, "doneArray");
 
     }
     //////this is passing an object not a string aka only text/////
     generateDoneItemString(activity) {
         var done_activity = `${activity.textInput} on ${activity.date}`;
         return done_activity;
+    }
+
+    componentWillReceiveProps(){
+        this.render()
     }
 
     render() {
@@ -233,7 +242,7 @@ class Done extends React.Component {
             <div className="completed-list">
                 <h3>Completed items:</h3>
                 <ul className="done-list">
-                    {this.state.list.map((activity, j) => <li key={j} ><input type="checkbox" onChange={this.isChecked} /> {this.generateDoneItemString(activity)}</li>)}
+                    {this.props.doneProp.map((activity, j) => <li key={j} ><input type="checkbox"  value={j} onChange={this.isChecked}  checked={true}/> {this.generateDoneItemString(activity)}</li>)}
                 </ul>
             </div>
         );
