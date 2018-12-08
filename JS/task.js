@@ -18,38 +18,40 @@ class ModalEditText extends React.Component {
         super(props);
         this.preventDefault = this.preventDefault.bind(this);
         this.editItem = this.editItem.bind(this);
+        this.deleteItem = this.deleteItem.bind(this);
     }
     preventDefault(event) {
         event.preventDefault();
     }
     editItem(event) {
         event.preventDefault();
-    //     if (this.state.isEditing) {
-    //         var textInput = this.textInput.value;
-    //         var dateInput = this.dateInput.value;
-    //         var timeInput = this.timeInput.value;
-    //         var obj = {
-    //             textInput: textInput,
-    //             date: dateInput,
-    //             time: timeInput
-    //         }
-    //         this.props.input(obj);
-    //         this.counter += 1;
-    //         this.textInput.value = "";      //CLEAR AFTER SAVED IN OBJ
-    //         this.dateInput.value = "";
-    //         this.timeInput.value = "";
-    //     }
+        var textInput = this.textInput.value;
+        var dateInput = this.dateInput.value;
+        var timeInput = this.timeInput.value;
+        var updatedObj = {
+            textInput: textInput,
+            date: dateInput,
+            time: timeInput
+        }
+        var index = event.target.value;
+        this.props.handleUpdate(updatedObj, index);
+    }
+    deleteItem(event) {
+        event.preventDefault();
+        console.log(this.props.editItem);
+        var index = event.target.value;
+        this.props.handleDelete(index);
     }
     render() {
         return (
             <div className="editModal">
                 <form onSubmit={this.preventDefault}>
-                    <input className="addNewItemText" ref={(input) => { this.textInput = input }} placeholder="Enter new item to your To Do list"></input>
-                    <input type="date" ref={(input) => { this.dateInput = input }}></input>
-                    <input type="time" ref={(input) => { this.timeInput = input }}></input>
-                    <br/>
-                    <button onSubmit={this.editItem}>Save</button>
-                    <button>Delete</button> 
+                    <input defaultValue={this.props.editItem.textInput} className="addNewItemText" ref={(input) => { this.textInput = input }}></input>
+                    <input defaultValue={this.props.editItem.date} type="date" ref={(input) => { this.dateInput = input }}></input>
+                    <input defaultValue={this.props.editItem.time} type="time" ref={(input) => { this.timeInput = input }}></input>
+                    <br />
+                    <button onClick={this.editItem}>Save</button>
+                    <button onClick={this.deleteItem}>Delete</button>
                 </form>
             </div>
         );
@@ -100,6 +102,8 @@ class Main extends React.Component {
         this.toggleItem = this.toggleItem.bind(this);
         this.addItem = this.addItem.bind(this);
         this.counter = 0;
+        this.updateItem = this.updateItem.bind(this);
+        this.deleteItem = this.deleteItem.bind(this);
         this.state = {
             categories: ["Main", "ITC", "Ulpan", "Chores"],
             toDoArray: [],
@@ -107,7 +111,6 @@ class Main extends React.Component {
         };
     }
     toggleItem(event, list) {
-        // event.preventDefault();
         var listItemIsIn = list === "toDoArray" ? this.state.toDoArray : this.state.completed;
         var listItemNotIn = list === "toDoArray" ? this.state.completed : this.state.toDoArray;
         var clickedItem = listItemIsIn[event.target.value];
@@ -130,13 +133,36 @@ class Main extends React.Component {
         })
     }
 
+    updateItem(updatedObj, index) {
+        var newArray = this.state.toDoArray;
+        // newArray.splice(index, 1);
+        console.log(updatedObj);
+        console.log(this.state.toDoArray);
+        newArray.push(updatedObj);
+        console.log(newArray);
+        this.setState({
+            toDoArray: newArray,
+        })
+    }
+
+    deleteItem(index) {
+        console.log(index);
+        var newArray = this.state.toDoArray;
+        // newArray.splice(index, 1);
+        this.setState({
+            toDoArray: newArray,
+        })
+    }
+
     render() {
         return (
             <div className="mainContainer">
                 <EnterItem categories={this.state.categories} input={this.addItem} />
-                <ToDoList toggleItem={this.toggleItem} toDoProp={this.state.toDoArray} />
+                <ToDoList toggleItem={this.toggleItem}
+                    toDoProp={this.state.toDoArray}
+                    handleUpdateItem={this.updateItem}
+                    handleDeleteItem={this.deleteItem} />
                 <Done toggleItem={this.toggleItem} doneProp={this.state.completed} />
-
             </div>
         );
     }
@@ -165,17 +191,12 @@ class EnterItem extends React.Component {
             }
             this.props.input(obj);
             this.counter += 1;
-            this.textInput.value = "";      //CLEAR AFTER SAVED IN OBJ
+            this.textInput.value = "";
             this.dateInput.value = "";
             this.timeInput.value = "";
         }
     }
 
-    // handleSelect() {            //ALLOWS CATEGORY DROPDOWN MENU TO GET CATEGORIE VALUE
-    //     this.setState({
-    //         value: event.target.value
-    //     });
-    // }
     render() {
         return (
             <div className="EnterNewItem">
@@ -183,11 +204,6 @@ class EnterItem extends React.Component {
                     <input className="addNewItemText" ref={(input) => { this.textInput = input }} placeholder="Enter new item to your To Do list"></input>
                     <input type="date" ref={(input) => { this.dateInput = input }}></input>
                     <input type="time" ref={(input) => { this.timeInput = input }}></input>
-                    <select onChange={this.handleSelect}>
-                        <option id="itc" value="0">ITC</option>
-                        <option id="ulpan" value="1">Ulpan</option>
-                        <option id="chores" value="2">Chores</option>
-                    </select>
                 </form>
             </div>
         );
@@ -230,10 +246,13 @@ class ToDoList extends React.Component {
         this.setState({
             isEditing: true
         });
-        console.log(this.props.toDoProp[event.target.value].textInput)
+        // console.log(this.props.toDoProp[event.target.value].textInput)
     }
     render() {
-        var displayEditModal = this.state.isEditing ? <ModalEditText editItem={this.props.toDoProp[event.target.value]} /> : null;
+        var displayEditModal = this.state.isEditing ? <ModalEditText
+            handleUpdate={this.props.handleUpdateItem}
+            handleDelete={this.props.handleDeleteItem}
+            editItem={this.props.toDoProp[event.target.value]} /> : null;
         return (
             /////needs to pass an object////
             <div className="list">
