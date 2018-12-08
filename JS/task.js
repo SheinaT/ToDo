@@ -17,13 +17,13 @@ class ModalEditText extends React.Component {
     constructor(props) {
         super(props);
         this.preventDefault = this.preventDefault.bind(this);
-        this.editItem = this.editItem.bind(this);
+        this.updatedItem = this.updateItem.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
     }
     preventDefault(event) {
         event.preventDefault();
     }
-    editItem(event) {
+    updateItem(event) {
         event.preventDefault();
         var textInput = this.textInput.value;
         var dateInput = this.dateInput.value;
@@ -33,13 +33,12 @@ class ModalEditText extends React.Component {
             date: dateInput,
             time: timeInput
         }
-        var index = event.target.value;
+        var index = this.props.editItemIndex;
         this.props.handleUpdate(updatedObj, index);
     }
     deleteItem(event) {
         event.preventDefault();
-        console.log(this.props.editItem);
-        var index = event.target.value;
+        var index = this.props.editItemIndex;
         this.props.handleDelete(index);
     }
     render() {
@@ -108,6 +107,7 @@ class Main extends React.Component {
             categories: ["Main", "ITC", "Ulpan", "Chores"],
             toDoArray: [],
             completed: [],
+            edit: false
         };
     }
     toggleItem(event, list) {
@@ -135,7 +135,7 @@ class Main extends React.Component {
 
     updateItem(updatedObj, index) {
         var newArray = this.state.toDoArray;
-        // newArray.splice(index, 1);
+        newArray.splice(index, 1);
         console.log(updatedObj);
         console.log(this.state.toDoArray);
         newArray.push(updatedObj);
@@ -146,12 +146,12 @@ class Main extends React.Component {
     }
 
     deleteItem(index) {
-        console.log(index);
         var newArray = this.state.toDoArray;
-        // newArray.splice(index, 1);
+        newArray.splice(index, 1);
         this.setState({
             toDoArray: newArray,
         })
+        console.log(this.state.toDoArray)
     }
 
     render() {
@@ -161,7 +161,8 @@ class Main extends React.Component {
                 <ToDoList toggleItem={this.toggleItem}
                     toDoProp={this.state.toDoArray}
                     handleUpdateItem={this.updateItem}
-                    handleDeleteItem={this.deleteItem} />
+                    handleDeleteItem={this.deleteItem} 
+                    stopEditing={this.state.edit}/>
                 <Done toggleItem={this.toggleItem} doneProp={this.state.completed} />
             </div>
         );
@@ -214,9 +215,9 @@ class ToDoList extends React.Component {
     constructor(props) {
         super(props);
         this.isChecked = this.isChecked.bind(this);
-        this.editItem = this.editItem.bind(this);
+        this.editItemFunc = this.editItemFunc.bind(this);
         this.state = {
-            isEditing: false
+            isEditing: this.props.stopEditing
         }
     }
     isChecked(event) {
@@ -240,25 +241,24 @@ class ToDoList extends React.Component {
         return new_activity;
     }
     componentWillReceiveProps() {
-        this.render()
+        this.render();
     }
-    editItem(event) {
+    editItemFunc() {
         this.setState({
             isEditing: true
         });
-        // console.log(this.props.toDoProp[event.target.value].textInput)
     }
     render() {
         var displayEditModal = this.state.isEditing ? <ModalEditText
             handleUpdate={this.props.handleUpdateItem}
             handleDelete={this.props.handleDeleteItem}
-            editItem={this.props.toDoProp[event.target.value]} /> : null;
+            editItem={this.props.toDoProp[event.target.value]} 
+            editItemIndex={event.target.value} /> : null;
         return (
-            /////needs to pass an object////
             <div className="list">
                 <h3>To Do List: </h3>
                 <ul className="main-list">
-                    {this.props.toDoProp.map((activity, i) => <li key={i} ><input type="checkbox" value={i} onChange={this.isChecked} checked={false} /> {this.generateItemString(activity)} <button onClick={this.editItem} className="edit-button" value={i}> EDIT </button> </li>)}
+                    {this.props.toDoProp.map((activity, i) => <li key={i} ><input type="checkbox" value={i} onChange={this.isChecked} checked={false} /> {this.generateItemString(activity)} <button onClick={this.editItemFunc} className="edit-button" value={i}> EDIT </button> </li>)}
                 </ul>
                 {displayEditModal}
             </div>
